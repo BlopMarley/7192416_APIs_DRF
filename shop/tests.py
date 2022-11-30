@@ -43,6 +43,19 @@ class TestCategory(ShopAPITestCase):
         self.assertEqual(response.status_code, 405)
         self.assertEqual(Category.objects.count(), category_count)
 
+    def test_detail(self):
+        url_detail = reverse('category-detail',kwargs={'pk': self.category.pk})
+        response = self.client.get(url_detail)
+        self.assertEqual(response.status_code, 200)
+        excepted = {
+            'id': self.category.pk,
+            'name': self.category.name,
+            'date_created': self.format_datetime(self.category.date_created),
+            'date_updated': self.format_datetime(self.category.date_updated),
+            'products': self.get_product_detail_data(self.category.products.filter(active=True)),
+        }
+        self.assertEqual(excepted, response.json())
+
 
 class TestProduct(ShopAPITestCase):
 
