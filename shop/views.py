@@ -22,8 +22,10 @@ class AdminCategoryViewset(MultipleSerializerMixin, ModelViewSet):
 
     serializer_class = CategoryListSerializer
     detail_serializer_class = CategoryDetailSerializer
-    queryset = Category.objects.all()
     permission_classes = [IsAdminAuthenticated, IsStaffAuthenticated]
+
+    def get_queryset(self):
+        return Category.objects.all()
 
 
 class CategoryViewset(MultipleSerializerMixin, ReadOnlyModelViewSet):
